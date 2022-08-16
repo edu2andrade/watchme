@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useMemo } from "react";
 import { api } from "../services/api";
 import { MovieCard } from "./MovieCard";
 
@@ -24,16 +24,17 @@ interface ContentProps {
   selectedGenre: GenreResponseProps;
 }
 
-export function Content({ selectedGenreId, selectedGenre }: ContentProps) {
-  // Complete aqui
-
+// memo here!
+function ContentComponent({ selectedGenreId, selectedGenre }: ContentProps) {
   const [movies, setMovies] = useState<MovieProps[]>([]);
 
+ 
   useEffect(() => {
     api.get<MovieProps[]>(`movies/?Genre_id=${selectedGenreId}`).then(response => {
       setMovies(response.data);
     });
   }, [selectedGenreId]);
+  
 
   return (
     <div className="container">
@@ -44,10 +45,23 @@ export function Content({ selectedGenreId, selectedGenre }: ContentProps) {
       <main>
         <div className="movies-list">
           {movies.map(movie => (
-            <MovieCard key ={movie.imdbID} title={movie.Title} poster={movie.Poster} runtime={movie.Runtime} rating={movie.Ratings[0].Value} />
+            <MovieCard 
+              key ={movie.imdbID} 
+              title={movie.Title} 
+              poster={movie.Poster} 
+              runtime={movie.Runtime} 
+              rating={movie.Ratings[0].Value}
+            />
           ))}
         </div>
       </main>
     </div>
   )
-}
+};
+
+export const Content = memo(ContentComponent, (PrevProps, NextProps) => {
+  return Object.is(PrevProps.selectedGenre, NextProps.selectedGenre);
+});
+// Shallow compare --> {} === {} --> false
+// Igualdade referencial
+// por isso passamos o 2º parametro no memo.

@@ -8,13 +8,12 @@ interface GenreResponseProps {
   title: string;
 }
 
-interface SidebarProps {
+interface SideBarProps {
   selectedGenreId: number;
   handleClickButton: (id: number) => void;
 }
 
-export function SideBar({ handleClickButton, selectedGenreId }: SidebarProps) {
-  // Complete aqui
+export function SideBar({ handleClickButton, selectedGenreId }: SideBarProps) {
   const [genres, setGenres] = useState<GenreResponseProps[]>([]);
 
   useEffect(() => {
@@ -40,4 +39,4 @@ export function SideBar({ handleClickButton, selectedGenreId }: SidebarProps) {
       </div>
     </nav>
   )
-}
+};
