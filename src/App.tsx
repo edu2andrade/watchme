@@ -23,7 +23,7 @@ export function App() {
   // useCallback here!
   const handleClickButton = useCallback((id: number) => {
     setSelectedGenreId(id);
-  }, [])
+  }, [selectedGenreId])
 
   useEffect(() => {
     api.get<GenreResponseProps>(`genres/${selectedGenreId}`).then(response => {
